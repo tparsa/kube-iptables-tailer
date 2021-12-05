@@ -13,6 +13,7 @@ type TestCase struct {
 	srcNamespace string
 	dstPodName   string
 	dstNamespace string
+	dstPort      string
 }
 
 // Test if Metrics can process packetDropsCount with its namespace, other side's service name, and traffic direction
@@ -34,7 +35,7 @@ func TestMetricsProcessPacketDrops(t *testing.T) {
 	// trafficDirection is simulated as sending when namespace has odd number and receiving when it has even number
 	for testCase := range testCaseMap {
 		for i := 0; i < testCaseMap[testCase]; i++ {
-			GetInstance().ProcessPacketDrop(testCase.srcNamespace, testCase.srcPodName, testCase.dstNamespace, testCase.dstPodName)
+			GetInstance().ProcessPacketDrop(testCase.srcNamespace, testCase.srcPodName, testCase.dstNamespace, testCase.dstPodName, testCase.dstPort)
 		}
 	}
 	// check the actual metrics raw data with expected string
@@ -51,7 +52,15 @@ func TestMetricsProcessPacketDrops(t *testing.T) {
 // Helper function to get string showing in metrics of given test case and its count
 func getPacketDropsCountMetricsString(testCase TestCase, count int) string {
 	// tags must be in alphabetical order
-	return fmt.Sprintf("packet_drops_count{dstNamespace=\"%s\",dstPod=\"%s\",srcNamespace=\"%s\",srcPod=\"%s\"} %v", testCase.dstNamespace, testCase.dstPodName, testCase.srcNamespace, testCase.srcPodName, count)
+	return fmt.Sprintf(
+		"packet_drops_count{dst_namespace=\"%s\",dst_pod=\"%s\",dst_port=\"%s\",src_namespace=\"%s\",src_pod=\"%s\"} %v",
+		testCase.dstNamespace,
+		testCase.dstPodName,
+		testCase.dstPort,
+		testCase.srcNamespace,
+		testCase.srcPodName,
+		count,
+	)
 }
 
 // Helper function to request content body from the handler.

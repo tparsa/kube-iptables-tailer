@@ -154,7 +154,7 @@ func getPacketDrop(packetDropLog, logTimeLayout string) (PacketDrop, error) {
 		srcPort = "undefined"
 		dstPort = "undefined"
 	}
-	
+
 	dstIP, err := getFieldValue(logFields, fieldDstIP)
 	if err != nil {
 		return PacketDrop{}, err
