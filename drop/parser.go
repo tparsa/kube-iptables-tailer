@@ -135,19 +135,27 @@ func getPacketDrop(packetDropLog, logTimeLayout string) (PacketDrop, error) {
 	if err != nil {
 		return PacketDrop{}, err
 	}
-	srcPort, err := getFieldValue(logFields, fieldSrcPort)
-	if err != nil {
-		return PacketDrop{}, err
-	}
-	dstIP, err := getFieldValue(logFields, fieldDstIP)
-	if err != nil {
-		return PacketDrop{}, err
-	}
-	dstPort, err := getFieldValue(logFields, fieldDstPort)
-	if err != nil {
-		return PacketDrop{}, err
-	}
 	proto, err := getFieldValue(logFields, fieldProto)
+	if err != nil {
+		return PacketDrop{}, err
+	}
+
+	var srcPort, dstPort string
+	if proto == "TCP" || proto == "UDP" {
+		srcPort, err = getFieldValue(logFields, fieldSrcPort)
+		if err != nil {
+			return PacketDrop{}, err
+		}
+		dstPort, err = getFieldValue(logFields, fieldDstPort)
+		if err != nil {
+			return PacketDrop{}, err
+		}
+	} else {
+		srcPort = "undefined"
+		dstPort = "undefined"
+	}
+	
+	dstIP, err := getFieldValue(logFields, fieldDstIP)
 	if err != nil {
 		return PacketDrop{}, err
 	}
