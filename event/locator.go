@@ -169,7 +169,7 @@ func getNamespaceOrHostName(pod *v1.Pod, ip string, resolver DnsResolver) string
 			case "name_with_namespace":
 				return fmt.Sprintf("%s/%s", pod.Namespace, pod.Name)
 			}
-			return pod.Namespace
+			return fmt.Sprintf("%s/%s", pod.Namespace, pod.Name)
 		}
 		if pod.Spec.NodeName != "" {
 			zap.L().Debug(
