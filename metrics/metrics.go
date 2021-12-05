@@ -31,8 +31,10 @@ func initMetricsSingleton() {
 		Help: "Counter for number of packet drops handled; excludes expired and duplicates.",
 	},
 		[]string{
-			"src",
-			"dst",
+			"srcNamespace",
+			"srcPod",
+			"dstNamespace",
+			"dstPod",
 		},
 	)
 
@@ -50,9 +52,11 @@ func (m *Metrics) GetHandler() http.Handler {
 }
 
 // Update the metrics by given service name
-func (m *Metrics) ProcessPacketDrop(src, dst string) {
+func (m *Metrics) ProcessPacketDrop(srcNamespace, srcPod, dstNamespace, dstPod string) {
 	m.packetDropsCount.With(prometheus.Labels{
-		"src": src,
-		"dst": dst,
+		"srcNamespace": srcNamespace,
+		"srcPod": srcPod,
+		"dstNamespace": dstNamespace,
+		"dstPod": dstPod,
 	}).Inc()
 }
