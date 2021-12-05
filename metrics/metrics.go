@@ -55,8 +55,8 @@ func (m *Metrics) GetHandler() http.Handler {
 func (m *Metrics) ProcessPacketDrop(srcNamespace, srcPod, dstNamespace, dstPod string) {
 	m.packetDropsCount.With(prometheus.Labels{
 		"srcNamespace": srcNamespace,
-		"srcPod": srcPod,
+		"srcPod":       srcPod,
 		"dstNamespace": dstNamespace,
-		"dstPod": dstPod,
+		"dstPod":       dstPod,
 	}).Inc()
 }

@@ -9,9 +9,9 @@ import (
 )
 
 type TestCase struct {
-	srcPodName string
+	srcPodName   string
 	srcNamespace string
-	dstPodName string
+	dstPodName   string
 	dstNamespace string
 }
 
@@ -23,9 +23,9 @@ func TestMetricsProcessPacketDrops(t *testing.T) {
 	// for trafficDirection, set it "SEND" if i is even, "RECEIVE" if i is odd
 	for i := 1; i <= 5; i++ {
 		testCase := TestCase{
-			srcPodName: fmt.Sprintf("%v", i),
+			srcPodName:   fmt.Sprintf("%v", i),
 			srcNamespace: "test-namespace",
-			dstPodName: fmt.Sprintf("%v", i),
+			dstPodName:   fmt.Sprintf("%v", i),
 			dstNamespace: "other-side-service-name",
 		}
 		testCaseMap[testCase] = i
@@ -51,7 +51,7 @@ func TestMetricsProcessPacketDrops(t *testing.T) {
 // Helper function to get string showing in metrics of given test case and its count
 func getPacketDropsCountMetricsString(testCase TestCase, count int) string {
 	// tags must be in alphabetical order
-	return fmt.Sprintf("packet_drops_count{dstNamesapce=\"%s\",dstPod=\"%s\",srcNamespace=\"%s\",srcPod=\"%s\"} %v", testCase.dstNamespace, testCase.dstPodName, testCase.srcNamespace, testCase.srcPodName, count)
+	return fmt.Sprintf("packet_drops_count{dstNamespace=\"%s\",dstPod=\"%s\",srcNamespace=\"%s\",srcPod=\"%s\"} %v", testCase.dstNamespace, testCase.dstPodName, testCase.srcNamespace, testCase.srcPodName, count)
 }
 
 // Helper function to request content body from the handler.
