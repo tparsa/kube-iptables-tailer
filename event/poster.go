@@ -119,7 +119,22 @@ func (poster *Poster) handle(packetDrop drop.PacketDrop) error {
 			return err
 		}
 	}
-	metrics.GetInstance().ProcessPacketDrop(srcPod.Namespace, srcPod.Name, dstPod.Namespace, dstPod.Name, packetDrop.DstPort)
+
+	var srcNamespace, dstNamespace string
+	if srcPod == nil {
+		srcNamespace = "unknown"
+	} else {
+		srcNamespace = srcPod.Namespace
+		srcName = srcPod.Name
+	}
+	if dstPod == nil {
+		dstNamespace = "unknown"
+	} else {
+		dstNamespace = dstPod.Namespace
+		dstName = dstPod.Name
+	}
+	metrics.GetInstance().ProcessPacketDrop(srcNamespace, srcName, dstNamespace, dstName, packetDrop.DstPort)
+
 	// update poster's eventSubmitTimeMap
 	poster.eventSubmitTimeMap[packetDrop.SrcIP+packetDrop.DstIP] = time.Now()
 	return nil
